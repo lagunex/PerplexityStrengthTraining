@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagunex Strength Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --success: #16a34a;
+            --warning: #ea580c;
+            --danger: #dc2626;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-radius: 0.5rem;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            flex: 1;
+            min-width: 100px;
+            padding: 0.75rem;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        nav button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        nav button:hover:not(.active) {
+            border-color: var(--primary);
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .week-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .day-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .day-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .day-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .day-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .day-status {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-badge.completed {
+            background: rgba(22, 163, 74, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.incomplete {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+        }
+
+        .status-badge.pending {
+            background: rgba(234, 88, 12, 0.1);
+            color: var(--warning);
+        }
+
+        .detail-view {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .detail-view h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .exercise-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-item h4 {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercise-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .timer-display {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 2rem;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .timer-controls button {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .timer-controls button:hover {
+            background: var(--primary-dark);
+        }
+
+        .reps-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .exercise-video {
+            margin: 1rem 0;
+        }
+
+        .exercise-video a {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .exercise-video a:hover {
+            background: var(--primary-dark);
+        }
+
+        .feedback-section {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 0.5rem;
+        }
+
+        .feedback-section h4 {
+            margin-bottom: 1rem;
+        }
+
+        .feedback-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-btn {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .feedback-btn.selected {
+            border-color: var(--primary);
+            background: rgba(2, 132, 199, 0.1);
+        }
+
+        .feeling-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feeling-btn {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .feeling-btn.selected {
+            transform: scale(1.1);
+            border-color: var(--primary);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .save-btn:hover {
+            background: #15803d;
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--border);
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            background: #cbd5e1;
+        }
+
+        .week-summary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .week-summary h3 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-box .value {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-box .label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .export-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .history-item h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .history-item p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 1rem;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .exercise-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exercise-filter-btn {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .exercise-filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .chart-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .chart-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .chart-stat-item {
+            background: var(--bg);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .chart-stat-item .label {
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .chart-stat-item .value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .no-data-message {
+            background: var(--bg);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        @media (min-width: 768px) {
+            .week-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .feedback-options {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .summary-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .exercise-selector {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .chart-canvas {
+                height: 400px;
+            }
+
+            .chart-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💪 Lagunex Strength Training</h1>
+            <p>8-Week Progressive Strength Program</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" data-view="week">Week View</button>
+            <button class="nav-btn" data-view="progress">Progress</button>
+            <button class="nav-btn" data-view="history">History</button>
+            <button class="nav-btn" data-view="settings">Settings</button>
+        </nav>
+
+        <!-- Week View -->
+        <div id="week" class="view active">
+            <div class="week-grid" id="weekGrid"></div>
+        </div>
+
+        <!-- Day Detail View -->
+        <div id="day" class="view">
+            <button class="back-btn" onclick="showView('week')">← Back to Week</button>
+            <div id="dayDetail"></div>
+        </div>
+
+        <!-- Progress View -->
+        <div id="progress" class="view">
+            <button class="back-btn" onclick="showView('week')">← Back to Week</button>
+            <div id="progressContent"></div>
+        </div>
+
+        <!-- History View -->
+        <div id="history" class="view">
+            <div id="historyContent"></div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settings" class="view">                <div class="detail-view">
+                    <h2>Settings</h2>
+                    <div style="margin-bottom: 1rem;">
+                        <button class="export-btn" onclick="exportCompleteWeekData()">📊 Export Week Results (For Perplexity)</button>
+                        <button class="export-btn" onclick="exportData()" style="background: #7c3aed;">📥 Export Raw Data</button>
+                        <button class="export-btn" style="background: var(--danger);" onclick="clearData()">🗑️ Clear All Data</button>
+                    </div>
+                <div style="background: var(--bg); padding: 1rem; border-radius: 0.5rem; font-size: 0.9rem; color: var(--text-light);">
+                    <p><strong>Current Week:</strong> <span id="currentWeek">Week 1</span></p>
+                    <p><strong>Days Completed:</strong> <span id="daysCompleted">0</span> / 5</p>
+                    <p><strong>Data saved locally on your device.</strong></p>
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+                        <h4 style="margin-bottom: 1rem;">📋 Export Instructions</h4>
+                        <ol style="color: var(--text-light); font-size: 0.9rem; line-height: 1.8;">
+                            <li><strong>Complete Week 1:</strong> Track all 5 days and save your progress</li>
+                            <li><strong>Export Results:</strong> Tap "Export Week Results" in Settings</li>
+                            <li><strong>Share with Perplexity:</strong> Upload the JSON file and ask for Week 2 generation with these details included</li>
+                            <li><strong>Receive Week 2:</strong> Perplexity will return updated exercises with progression</li>
+                            <li><strong>Update Website:</strong> Follow "Upload Week 2" instructions below</li>
+                        </ol>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: var(--border); border-radius: 0.5rem;">
+                        <h4 style="margin-bottom: 0.75rem;">🔄 To Update Website with New Week</h4>
+                        <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.75rem;"><strong>Perplexity will provide you with:</strong> A complete workoutData JavaScript object for the new week</p>
+                        <ol style="color: var(--text-light); font-size: 0.9rem; line-height: 1.8;">
+                            <li>Go to <strong>github.com/yourusername/lagunexstrengthtraining</strong></li>
+                            <li>Click on <strong>index.html</strong></li>
+                            <li>Click the <strong>pencil icon</strong> (✏️) to edit</li>
+                            <li>Find the line: <code style="background: var(--bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">const workoutData = {</code></li>
+                            <li>Locate your current week data block (e.g., <code style="background: var(--bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">1: { monday: { ... } }</code>)</li>
+                            <li>Add the new week block right after (e.g., <code style="background: var(--bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">2: { monday: { ... } }</code>)</li>
+                            <li>Scroll down, click <strong>"Commit changes"</strong></li>
+                            <li>Update the app manually by changing <code style="background: var(--bg); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">currentWeek = 2</code> in the JavaScript section</li>
+                            <li><strong>Refresh your browser</strong> - new week will appear</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let workoutData = {};
+        
+        // Load workout data from JSON files on startup
+        async function loadWorkoutData() {
+            try {
+                // Try to load week data sequentially
+                for (let week = 1; week <= 8; week++) {
+                    try {
+                        const response = await fetch(`workouts/week${week}.json`);
+                        if (response.ok) {
+                            const weekData = await response.json();
+                            workoutData[week] = weekData;
+                        }
+                    } catch (e) {
+                        // Week file doesn't exist yet, skip
+                        break;
+                    }
+                }
+                
+                // If no weeks loaded, use empty object
+                if (Object.keys(workoutData).length === 0) {
+                    console.warn('No workout files found in /workouts directory. Please add week1.json');
+                    showLoadError();
+                    return false;
+                }
+                
+                init();
+                return true;
+            } catch (error) {
+                console.error('Error loading workout data:', error);
+                showLoadError();
+                return false;
+            }
+        }
+
+        function showLoadError() {
+            const container = document.querySelector('.container');
+            container.innerHTML = `
+                <div style="padding: 2rem; text-align: center;">
+                    <h2 style="color: var(--danger); margin-bottom: 1rem;">⚠️ Workout Files Not Found</h2>
+                    <p style="color: var(--text-light); margin-bottom: 1.5rem;">
+                        The app couldn't find workout JSON files. Please ensure your repo structure is correct:
+                    </p>
+                    <div style="background: var(--bg); padding: 1.5rem; border-radius: 0.5rem; text-align: left; max-width: 400px; margin: 0 auto; font-size: 0.9rem; font-family: monospace;">
+                        <p><strong>perplexitystrengthtraining/</strong></p>
+                        <p>&nbsp;&nbsp;├── index.html</p>
+                        <p>&nbsp;&nbsp;├── workouts/</p>
+                        <p>&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── week1.json</p>
+                        <p>&nbsp;&nbsp;└── results/</p>
+                    </div>
+                    <p style="color: var(--text-light); margin-top: 1.5rem; font-size: 0.9rem;">
+                        See README.md for instructions on uploading your first week.
+                    </p>
+                </div>
+            `;
+        }
+
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        const dayNames = {
+            monday: 'Monday',
+            tuesday: 'Tuesday',
+            wednesday: 'Wednesday',
+            thursday: 'Thursday',
+            friday: 'Friday'
+        };
+
+        let currentWeek = 1;
+        let timerInterval = null;
+        let timerSeconds = 0;
+
+        // Initialize
+        function init() {
+            // Set current week to highest available week
+            currentWeek = Math.max(...Object.keys(workoutData).map(Number));
+            loadData();
+            renderWeekView();
+            setupNavigation();
+        }
+
+        function setupNavigation() {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    showView(e.target.dataset.view);
+                });
+            });
+        }
+
+        function showView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewName).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`[data-view="${viewName}"]`).classList.add('active');
+
+            if (viewName === 'history') renderHistoryView();
+            if (viewName === 'progress') renderProgressView();
+            if (viewName === 'settings') renderSettingsView();
+        }
+
+        function renderWeekView() {
+            const weekGrid = document.getElementById('weekGrid');
+            weekGrid.innerHTML = '';
+
+            days.forEach(day => {
+                const workout = workoutData[currentWeek][day];
+                const data = getDayData(day);
+                const status = data.completed !== undefined ? (data.completed ? 'completed' : 'incomplete') : 'pending';
+
+                const card = document.createElement('div');
+                card.className = 'day-card';
+                card.onclick = () => showDayDetail(day);
+
+                let statusHtml = `<div class="status-badge ${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</div>`;
+
+                card.innerHTML = `
+                    <h3>${workout.name}</h3>
+                    <p>${workout.type}</p>
+                    <div class="day-status">
+                        ${statusHtml}
+                        ${data.feeling ? `<span style="font-size: 1.5rem;">${data.feeling}</span>` : ''}
+                    </div>
+                `;
+
+                weekGrid.appendChild(card);
+            });
+        }
+
+        function showDayDetail(day) {
+            const workout = workoutData[currentWeek][day];
+            const data = getDayData(day);
+            const detailDiv = document.getElementById('dayDetail');
+
+            let exerciseHtml = '';
+            workout.exercises.forEach((ex, idx) => {
+                const exData = data.exercises?.[idx] || {};
+                exerciseHtml += `
+                    <div class="exercise-item">
+                        <h4>${ex.name}</h4>
+                        <div class="exercise-details">
+                            <strong>Sets:</strong> ${ex.sets} | <strong>Reps:</strong> ${ex.reps} | <strong>Weight:</strong> ${ex.weight}
+                        </div>
+                        ${ex.video ? `<div class="exercise-video"><a href="${ex.video}" target="_blank">📹 Watch Video</a></div>` : ''}
+                        <input type="number" class="reps-input" placeholder="Completed reps" value="${exData.repsCompleted || ''}" data-exercise="${idx}">
+                        <button class="timer-controls" onclick="startRest(${idx})" style="display: flex; gap: 0.5rem;">
+                            <button style="flex: 1;">⏱️ Rest Timer (30s)</button>
+                        </button>
+                        <div id="timer-${idx}" class="timer-display" style="display: none;">00:30</div>
+                    </div>
+                `;
+            });
+
+            detailDiv.innerHTML = `
+                <div class="detail-view">
+                    <h2>${workout.name} - ${workout.type}</h2>
+                    ${exerciseHtml}
+                    
+                    <div class="feedback-section">
+                        <h4>How did you feel?</h4>
+                        <div class="feeling-options">
+                            <button class="feeling-btn ${data.feeling === '😔' ? 'selected' : ''}" onclick="updateFeeling('😔')">😔</button>
+                            <button class="feeling-btn ${data.feeling === '😐' ? 'selected' : ''}" onclick="updateFeeling('😐')">😐</button>
+                            <button class="feeling-btn ${data.feeling === '🙂' ? 'selected' : ''}" onclick="updateFeeling('🙂')">🙂</button>
+                            <button class="feeling-btn ${data.feeling === '😊' ? 'selected' : ''}" onclick="updateFeeling('😊')">😊</button>
+                            <button class="feeling-btn ${data.feeling === '🔥' ? 'selected' : ''}" onclick="updateFeeling('🔥')">🔥</button>
+                        </div>
+
+                        <h4 style="margin-top: 1rem;">Did you complete the workout?</h4>
+                        <div class="feedback-options">
+                            <button class="feedback-btn ${data.completed === true ? 'selected' : ''}" onclick="updateCompletion(true)">✅ Completed</button>
+                            <button class="feedback-btn ${data.completed === false ? 'selected' : ''}" onclick="updateCompletion(false)">❌ Failed</button>
+                        </div>
+                    </div>
+
+                    <button class="save-btn" onclick="saveDay('${day}')">💾 Save Progress</button>
+                </div>
+            `;
+
+            document.getElementById('week').classList.remove('active');
+            document.getElementById('day').classList.add('active');
+        }
+
+        function startRest(exerciseIdx) {
+            const timerDiv = document.getElementById(`timer-${exerciseIdx}`);
+            const button = event.target;
+
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerDiv.style.display = 'none';
+                button.textContent = '⏱️ Rest Timer (30s)';
+                return;
+            }
+
+            timerSeconds = 30;
+            timerDiv.style.display = 'block';
+            button.textContent = '⏹️ Stop Timer';
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                const mins = Math.floor(timerSeconds / 60);
+                const secs = timerSeconds % 60;
+                timerDiv.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    timerDiv.style.display = 'none';
+                    button.textContent = '⏱️ Rest Timer (30s)';
+                    playNotification();
+                }
+            }, 1000);
+        }
+
+        function playNotification() {
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('Rest Time Over!', { body: 'Time to start your next set!' });
+            }
+        }
+
+        function updateFeeling(emoji) {
+            document.querySelectorAll('.feeling-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            window.currentFeeling = emoji;
+        }
+
+        function updateCompletion(completed) {
+            document.querySelectorAll('.feedback-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            window.currentCompletion = completed;
+        }
+
+        function saveDay(day) {
+            const repsInputs = document.querySelectorAll('.reps-input');
+            const exercises = [];
+
+            repsInputs.forEach((input, idx) => {
+                exercises.push({
+                    repsCompleted: parseInt(input.value) || 0
+                });
+            });
+
+            const dayData = {
+                date: new Date().toISOString(),
+                feeling: window.currentFeeling || '😐',
+                completed: window.currentCompletion !== undefined ? window.currentCompletion : null,
+                exercises: exercises
+            };
+
+            const storageKey = `workout_${currentWeek}_${day}`;
+            localStorage.setItem(storageKey, JSON.stringify(dayData));
+
+            window.currentFeeling = undefined;
+            window.currentCompletion = undefined;
+
+            alert('✅ Progress saved!');
+            showView('week');
+            renderWeekView();
+        }
+
+        function getDayData(day) {
+            const storageKey = `workout_${currentWeek}_${day}`;
+            const data = localStorage.getItem(storageKey);
+            return data ? JSON.parse(data) : {};
+        }
+
+        function renderHistoryView() {
+            const historyDiv = document.getElementById('historyContent');
+            let html = '<h2>Workout History</h2>';
+
+            // Get all weeks from localStorage
+            const allKeys = Object.keys(localStorage).filter(k => k.startsWith('workout_'));
+            const weeks = new Set();
+            allKeys.forEach(k => {
+                const week = k.split('_')[1];
+                weeks.add(week);
+            });
+
+            if (weeks.size === 0) {
+                historyDiv.innerHTML = html + '<p style="color: var(--text-light); text-align: center; padding: 2rem;">No workout history yet. Complete some workouts to see history!</p>';
+                return;
+            }
+
+            Array.from(weeks).sort().reverse().forEach(week => {
+                let weekCompleted = 0;
+                let weekFeeling = {};
+
+                days.forEach(day => {
+                    const key = `workout_${week}_${day}`;
+                    const data = localStorage.getItem(key);
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        if (parsed.completed) weekCompleted++;
+                        weekFeeling[day] = parsed.feeling || '❓';
+                    }
+                });
+
+                html += `
+                    <div class="week-summary">
+                        <h3>Week ${week}</h3>
+                        <div class="summary-stats">
+                            <div class="stat-box">
+                                <div class="value">${weekCompleted}</div>
+                                <div class="label">Days Complete</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="value">${Math.round(weekCompleted / 5 * 100)}%</div>
+                                <div class="label">Completion</div>
+                            </div>
+                        </div>
+                        <ul class="history-list">
+                            ${days.map(day => {
+                                const data = getDayData(day);
+                                const key = `workout_${week}_${day}`;
+                                const exists = localStorage.getItem(key);
+                                return exists ? `
+                                    <li class="history-item">
+                                        <h4>${dayNames[day]} ${weekFeeling[day] || '❓'}</h4>
+                                        <p>${data.completed ? '✅ Completed' : '❌ Not completed'}</p>
+                                    </li>
+                                ` : '';
+                            }).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+
+            historyDiv.innerHTML = html;
+        }
+
+        function renderProgressView() {
+            const progressDiv = document.getElementById('progressContent');
+            
+            // Get all unique exercises across all weeks and days
+            const allExercises = new Set();
+            Object.keys(workoutData).forEach(week => {
+                days.forEach(day => {
+                    if (workoutData[week][day]?.exercises) {
+                        workoutData[week][day].exercises.forEach(ex => {
+                            allExercises.add(ex.name);
+                        });
+                    }
+                });
+            });
+
+            if (allExercises.size === 0) {
+                progressDiv.innerHTML = '<div class="no-data-message">No exercises found in workout data.</div>';
+                return;
+            }
+
+            const exerciseList = Array.from(allExercises).sort();
+            const selectedExercise = window.selectedExerciseFilter || exerciseList[0];
+
+            // Build exercise filter buttons
+            let filterHtml = '<div class="exercise-selector">';
+            exerciseList.forEach(ex => {
+                const isActive = ex === selectedExercise ? 'active' : '';
+                filterHtml += `
+                    <button class="exercise-filter-btn ${isActive}" onclick="filterProgressExercise('${ex}')">
+                        ${ex}
+                    </button>
+                `;
+            });
+            filterHtml += '</div>';
+
+            // Get progress data for selected exercise
+            const progressData = getExerciseProgressData(selectedExercise);
+
+            if (progressData.weeks.length === 0) {
+                progressDiv.innerHTML = filterHtml + '<div class="no-data-message">No progress data yet for this exercise. Complete workouts to see charts.</div>';
+                return;
+            }
+
+            // Render chart
+            let chartHtml = filterHtml + `
+                <div class="chart-container">
+                    <div class="chart-title">📈 ${selectedExercise} - Weekly Progress</div>
+                    <canvas id="progressChart" class="chart-canvas"></canvas>
+                    <div class="chart-stats">
+                        <div class="chart-stat-item">
+                            <div class="label">Current Week</div>
+                            <div class="value">Week ${progressData.weeks[progressData.weeks.length - 1]}</div>
+                        </div>
+                        <div class="chart-stat-item">
+                            <div class="label">Latest Reps</div>
+                            <div class="value">${progressData.reps[progressData.reps.length - 1]}</div>
+                        </div>
+                        <div class="chart-stat-item">
+                            <div class="label">Total Gain</div>
+                            <div class="value">${progressData.reps[progressData.reps.length - 1] - progressData.reps[0]}</div>
+                        </div>
+                        <div class="chart-stat-item">
+                            <div class="label">Best Week</div>
+                            <div class="value">${Math.max(...progressData.reps)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            progressDiv.innerHTML = chartHtml;
+
+            // Draw chart after DOM update
+            setTimeout(() => {
+                drawProgressChart(selectedExercise, progressData);
+            }, 100);
+        }
+
+        function filterProgressExercise(exerciseName) {
+            window.selectedExerciseFilter = exerciseName;
+            renderProgressView();
+        }
+
+        function getExerciseProgressData(exerciseName) {
+            const progressByWeek = {};
+            const allWeeks = Object.keys(workoutData).map(Number).sort((a, b) => a - b);
+
+            allWeeks.forEach(week => {
+                let weekTotal = 0;
+                let exerciseFound = false;
+
+                days.forEach(day => {
+                    const workout = workoutData[week][day];
+                    const dayData = localStorage.getItem(`workout_${week}_${day}`);
+                    
+                    if (dayData) {
+                        const parsedDay = JSON.parse(dayData);
+                        
+                        // Find exercise index
+                        const exerciseIdx = workout.exercises.findIndex(ex => ex.name === exerciseName);
+                        
+                        if (exerciseIdx !== -1 && parsedDay.exercises?.[exerciseIdx]) {
+                            weekTotal += parsedDay.exercises[exerciseIdx].repsCompleted || 0;
+                            exerciseFound = true;
+                        }
+                    }
+                });
+
+                if (exerciseFound && weekTotal > 0) {
+                    progressByWeek[week] = weekTotal;
+                }
+            });
+
+            const weeks = Object.keys(progressByWeek).map(Number).sort((a, b) => a - b);
+            const reps = weeks.map(w => progressByWeek[w]);
+
+            return {
+                weeks: weeks,
+                reps: reps,
+                total: reps.reduce((a, b) => a + b, 0)
+            };
+        }
+
+        function drawProgressChart(exerciseName, data) {
+            const canvas = document.getElementById('progressChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            const width = rect.width;
+            const height = rect.height;
+            const padding = 40;
+            const chartWidth = width - padding * 2;
+            const chartHeight = height - padding * 2;
+
+            // Find max value for scaling
+            const maxReps = Math.max(...data.reps) * 1.1;
+            const minReps = Math.min(...data.reps) * 0.9;
+            const range = maxReps - minReps;
+
+            // Draw background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw grid lines
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (chartHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+
+            // Draw axes
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding);
+            ctx.stroke();
+
+            // Draw axis labels
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+            ctx.textAlign = 'center';
+
+            // X-axis labels (weeks)
+            data.weeks.forEach((week, idx) => {
+                const x = padding + (chartWidth / (data.weeks.length - 1 || 1)) * idx;
+                ctx.fillText(`W${week}`, x, height - padding + 20);
+            });
+
+            // Y-axis labels
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 5; i++) {
+                const value = minReps + (range / 5) * i;
+                const y = height - padding - (chartHeight / 5) * i;
+                ctx.fillText(Math.round(value), padding - 10, y + 4);
+            }
+
+            // Draw line and points
+            ctx.strokeStyle = '#0284c7';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+
+            data.reps.forEach((rep, idx) => {
+                const x = padding + (chartWidth / (data.reps.length - 1 || 1)) * idx;
+                const y = height - padding - ((rep - minReps) / range) * chartHeight;
+
+                if (idx === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+
+            // Draw data points
+            ctx.fillStyle = '#0284c7';
+            data.reps.forEach((rep, idx) => {
+                const x = padding + (chartWidth / (data.reps.length - 1 || 1)) * idx;
+                const y = height - padding - ((rep - minReps) / range) * chartHeight;
+
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Draw value label
+                ctx.fillStyle = '#0f172a';
+                ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(rep, x, y - 12);
+                ctx.fillStyle = '#0284c7';
+            });
+        }
+
+        function renderSettingsView() {
+            const daysCompleted = days.filter(day => getDayData(day).completed).length;
+            document.getElementById('currentWeek').textContent = `Week ${currentWeek}`;
+            document.getElementById('daysCompleted').textContent = daysCompleted;
+        }
+
+        function exportData() {
+            const allData = {};
+            Object.keys(localStorage).filter(k => k.startsWith('workout_')).forEach(key => {
+                allData[key] = JSON.parse(localStorage.getItem(key));
+            });
+
+            const dataStr = JSON.stringify(allData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `workout-progress-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        function exportCompleteWeekData() {
+            const weekData = {
+                week: currentWeek,
+                exportDate: new Date().toISOString(),
+                userInfo: {
+                    program: 'Lagunex 8-Week Strength Training',
+                    currentWeek: currentWeek,
+                    totalWeeks: 8
+                },
+                weekSummary: {
+                    completionRate: 0,
+                    daysCompleted: 0,
+                    averageMood: '😐',
+                    notes: 'Week completed. Ready for next week.'
+                },
+                dayResults: {},
+                nextWeekInstructions: {
+                    step1: 'Share this JSON file with Perplexity Labs',
+                    step2: 'Request Week ' + (currentWeek + 1) + ' workout generation',
+                    step3: 'Receive updated workout JSON with exercise increments and variations',
+                    step4: 'Follow upload instructions to update the website'
+                }
+            };
+
+            let daysCompleted = 0;
+            let feelings = [];
+
+            days.forEach(day => {
+                const data = getDayData(day);
+                const workout = workoutData[currentWeek][day];
+                
+                if (data.completed !== undefined) {
+                    if (data.completed) daysCompleted++;
+                    if (data.feeling) feelings.push(data.feeling);
+                }
+
+                weekData.dayResults[day] = {
+                    name: dayNames[day],
+                    type: workout.type,
+                    completed: data.completed || false,
+                    feeling: data.feeling || '❓',
+                    date: data.date || 'Not started',
+                    exerciseResults: workout.exercises.map((ex, idx) => ({
+                        name: ex.name,
+                        plannedSets: ex.sets,
+                        plannedReps: ex.reps,
+                        weight: ex.weight,
+                        completedReps: data.exercises?.[idx]?.repsCompleted || 0,
+                        notes: `Completed ${data.exercises?.[idx]?.repsCompleted || 0} of ${ex.reps} target`
+                    }))
+                };
+            });
+
+            weekData.weekSummary.completionRate = Math.round((daysCompleted / 5) * 100);
+            weekData.weekSummary.daysCompleted = daysCompleted;
+            weekData.weekSummary.averageMood = feelings.length > 0 ? feelings[0] : '😐';
+
+            const dataStr = JSON.stringify(weekData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `lagunex-week${currentWeek}-results-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            alert('✅ Week ' + currentWeek + ' data exported! Share this file with Perplexity Labs for Week ' + (currentWeek + 1) + ' generation.');
+        }
+
+        function clearData() {
+            if (confirm('⚠️ This will delete all your workout data. Are you sure?')) {
+                Object.keys(localStorage).filter(k => k.startsWith('workout_')).forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                alert('✅ All data cleared!');
+                renderWeekView();
+            }
+        }
+
+        function loadData() {
+            // Data loads from localStorage automatically
+        }
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        // Load workouts on page load
+        loadWorkoutData();
+    </script>
+</body>
+</html>
