@@ -1,1 +1,51 @@
+{
+  "monday": {
+    "name": "Monday",
+    "type": "Strength Circuit A",
+    "exercises": [
+      { "name": "Pushups", "sets": 3, "reps": 8, "weight": "Bodyweight", "video": "https://www.youtube.com/watch?v=IODxDxX7oi0" },
+      { "name": "Goblet Squats", "sets": 4, "reps": 10, "weight": "12kg KB", "video": "https://www.youtube.com/watch?v=V-VOvY4ACLU" },
+      { "name": "DB Rows/arm", "sets": 3, "reps": 8, "weight": "10kg DB", "video": "https://www.youtube.com/watch?v=pYcpY20PdIw" },
+      { "name": "KB Swings", "sets": 3, "reps": 12, "weight": "12kg KB", "video": "https://www.youtube.com/watch?v=W-UcSede8Ys" },
+      { "name": "Plank", "sets": 3, "reps": "30s", "weight": "Bodyweight", "video": "https://www.youtube.com/watch?v=pSHjTRCQxIw" }
+    ]
+  },
+  "tuesday": {
+    "name": "Tuesday",
+    "type": "Swim Circuit",
+    "exercises": [
+      { "name": "Warm-up", "sets": 4, "reps": "50m easy", "weight": "-", "video": "https://www.youtube.com/watch?v=xbjhh5AoXI0" },
+      { "name": "Main Set", "sets": 6, "reps": "50m moderate", "weight": "-", "video": "https://www.youtube.com/watch?v=xbjhh5AoXI0" },
+      { "name": "Cool-down", "sets": 2, "reps": "50m easy/pull", "weight": "-", "video": "https://www.youtube.com/watch?v=xbjhh5AoXI0" }
+    ]
+  },
+  "wednesday": {
+    "name": "Wednesday",
+    "type": "Run",
+    "exercises": [
+      { "name": "Steady Run", "sets": 1, "reps": "3km", "weight": "-", "video": "https://www.youtube.com/watch?v=XqDLqjCy6Rw" }
+    ]
+  },
+  "thursday": {
+    "name": "Thursday",
+    "type": "Strength Circuit B",
+    "exercises": [
+      { "name": "Pushups", "sets": 3, "reps": 8, "weight": "Bodyweight", "video": "https://www.youtube.com/watch?v=IODxDxX7oi0" },
+      { "name": "KB Sumo Deadlifts", "sets": 4, "reps": 10, "weight": "12kg KB", "video": "https://www.youtube.com/watch?v=8Gt7UroYbvI" },
+      { "name": "Single-arm DB Press", "sets": 3, "reps": "8/arm", "weight": "10kg DB", "video": "https://www.youtube.com/watch?v=I4u0oT3pxJw" },
+      { "name": "DB Rows/arm", "sets": 3, "reps": 8, "weight": "10kg DB", "video": "https://www.youtube.com/watch?v=pYcpY20PdIw" },
+      { "name": "Reverse Lunges", "sets": 3, "reps": "10/leg", "weight": "10kg DBs", "video": "https://www.youtube.com/watch?v=SE64rK38ozI" },
+      { "name": "Russian KB Swings", "sets": 3, "reps": 12, "weight": "12kg KB", "video": "https://www.youtube.com/watch?v=U3FhH3nDk58" }
+    ]
+  },
+  "friday": {
+    "name": "Friday",
+    "type": "Swim Circuit",
+    "exercises": [
+      { "name": "Warm-up", "sets": 4, "reps": "50m easy", "weight": "-", "video": "https://www.youtube.com/watch?v=xbjhh5AoXI0" },
+      { "name": "Main Set", "sets": 6, "reps": "50m moderate", "weight": "-", "video": "https://www.youtube.com/watch?v=xbjhh5AoXI0" },
+      { "name": "Cool-down", "sets": 2, "reps": "50m easy/pull", "weight": "-", "video": "https://www.youtube.com/watch?v=xbjhh5AoXI0" }
+    ]
+  }
+}
 
