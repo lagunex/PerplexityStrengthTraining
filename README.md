@@ -4,8 +4,7 @@
 
 ## 🚀 Live Site
 
-Visit: **https://yourusername.github.io/perplexitystrengthtraining/**
-
+Visit: **https://lagunex.github.io/PerplexityStrengthTraining/**
 
 ## 📖 Workflow: Week 1 → Week 2
 
