@@ -27,13 +27,34 @@ Visit: **https://lagunex.github.io/PerplexityStrengthTraining/**
 ```
 I’ve completed Week 1 of my 8-week strength program.
 Here’s my results JSON with completion data and mood.
+
 Based on my actual performance (days completed, reps achieved, mood),
 generate Week 2 with progressive exercise increments and variations.
+
+My training goals after 8 weeks:
+- 100 pushups per strength training session
+- 150 squats per strength training session
+- 50 dumbbell rows per arm with 10kg per strength training session
+- swim 1km per session
+- run 5kg in 30 minutes 
+
+My training constraints:
+- dumbbells of 10kg each with gradual weights
+- kettebell of 12kg
+- skipping rope
+- 30 min per session max
+- swimming twice a week
+- running once a week
+- no training on weekend
+- full body strength training sessions
+
+I want each week to show progressive overload toward my goal based on the previous week.
+
 Return ONLY the week2.json file content (not wrapped in code block,
 just the raw JSON object for days: monday, tuesday, wednesday, thursday, friday).
+
 Format exactly like week1.json structure.
 ```
-
 
 ### Step 4: Upload Week 2 JSON to GitHub
 - Perplexity returns: `week2.json` content
