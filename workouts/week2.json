@@ -1,0 +1,165 @@
+{
+  "monday": {
+    "name": "Monday - Strength Circuit A+",
+    "type": "Full-Body Strength",
+    "exercises": [
+      {
+        "name": "Pushups",
+        "sets": 3,
+        "reps": 10,
+        "weight": "Bodyweight",
+        "video": "https://www.youtube.com/watch?v=IODxDxX7oi4"
+      },
+      {
+        "name": "Goblet Squats",
+        "sets": 4,
+        "reps": 12,
+        "weight": "12kg KB",
+        "video": "https://www.youtube.com/watch?v=MeIiIdhvEXY"
+      },
+      {
+        "name": "DB Rows (per arm)",
+        "sets": 3,
+        "reps": 10,
+        "weight": "10kg DB",
+        "video": "https://www.youtube.com/watch?v=pYcpY20QaE8"
+      },
+      {
+        "name": "KB Swings",
+        "sets": 3,
+        "reps": 15,
+        "weight": "12kg KB",
+        "video": "https://www.youtube.com/watch?v=3_0Jmiw4OMQ"
+      },
+      {
+        "name": "Plank",
+        "sets": 3,
+        "reps": "40s",
+        "weight": "Bodyweight",
+        "video": "https://www.youtube.com/watch?v=pSHjTRCQxIw"
+      }
+    ]
+  },
+  "tuesday": {
+    "name": "Tuesday - Swim Progression",
+    "type": "Swim Endurance",
+    "exercises": [
+      {
+        "name": "Warm-up",
+        "sets": 4,
+        "reps": "75m easy",
+        "weight": "-",
+        "video": "https://www.youtube.com/watch?v=7x0r9uT7K4c"
+      },
+      {
+        "name": "Main Set (progression)",
+        "sets": 6,
+        "reps": "75m moderate",
+        "weight": "-",
+        "video": "https://www.youtube.com/watch?v=7x0r9uT7K4c"
+      },
+      {
+        "name": "Cool-down",
+        "sets": 2,
+        "reps": "75m easy/pull",
+        "weight": "-",
+        "video": "https://www.youtube.com/watch?v=7x0r9uT7K4c"
+      }
+    ]
+  },
+  "wednesday": {
+    "name": "Wednesday - Run Progression",
+    "type": "Run Endurance",
+    "exercises": [
+      {
+        "name": "Steady Run (progression)",
+        "sets": 1,
+        "reps": "3.5km",
+        "weight": "Bodyweight",
+        "video": "https://www.youtube.com/watch?v=1MCF0aD4L4s"
+      },
+      {
+        "name": "Skipping Rope",
+        "sets": 3,
+        "reps": "2min",
+        "weight": "Skipping rope",
+        "video": "https://www.youtube.com/watch?v=ml6OmM6w3p4"
+      }
+    ]
+  },
+  "thursday": {
+    "name": "Thursday - Strength Circuit B+",
+    "type": "Full-Body Strength",
+    "exercises": [
+      {
+        "name": "Pushups",
+        "sets": 3,
+        "reps": 10,
+        "weight": "Bodyweight",
+        "video": "https://www.youtube.com/watch?v=IODxDxX7oi4"
+      },
+      {
+        "name": "KB Sumo Deadlifts",
+        "sets": 4,
+        "reps": 12,
+        "weight": "12kg KB",
+        "video": "https://www.youtube.com/watch?v=9xCzqgiZ2a8"
+      },
+      {
+        "name": "Single-arm DB Press (per arm)",
+        "sets": 3,
+        "reps": "10/arm",
+        "weight": "10kg DB",
+        "video": "https://www.youtube.com/watch?v=qEwKCR5JCog"
+      },
+      {
+        "name": "DB Rows (per arm)",
+        "sets": 3,
+        "reps": 10,
+        "weight": "10kg DB",
+        "video": "https://www.youtube.com/watch?v=pYcpY20QaE8"
+      },
+      {
+        "name": "Reverse Lunges (per leg)",
+        "sets": 3,
+        "reps": "12/leg",
+        "weight": "10kg DBs",
+        "video": "https://www.youtube.com/watch?v=L8fvjJo7a3Q"
+      },
+      {
+        "name": "Russian KB Swings",
+        "sets": 3,
+        "reps": 15,
+        "weight": "12kg KB",
+        "video": "https://www.youtube.com/watch?v=3_0Jmiw4OMQ"
+      }
+    ]
+  },
+  "friday": {
+    "name": "Friday - Swim Progression",
+    "type": "Swim Endurance",
+    "exercises": [
+      {
+        "name": "Warm-up",
+        "sets": 4,
+        "reps": "75m easy",
+        "weight": "-",
+        "video": "https://www.youtube.com/watch?v=7x0r9uT7K4c"
+      },
+      {
+        "name": "Main Set (progression)",
+        "sets": 6,
+        "reps": "75m moderate",
+        "weight": "-",
+        "video": "https://www.youtube.com/watch?v=7x0r9uT7K4c"
+      },
+      {
+        "name": "Cool-down",
+        "sets": 2,
+        "reps": "75m easy/pull",
+        "weight": "-",
+        "video": "https://www.youtube.com/watch?v=7x0r9uT7K4c"
+      }
+    ]
+  }
+}
