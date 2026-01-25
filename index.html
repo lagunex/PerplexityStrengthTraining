@@ -589,13 +589,14 @@
         </div>
 
         <!-- Settings View -->
-        <div id="settings" class="view">                <div class="detail-view">
-                    <h2>Settings</h2>
-                    <div style="margin-bottom: 1rem;">
-                        <button class="export-btn" onclick="exportCompleteWeekData()">📊 Export Week Results (For Perplexity)</button>
-                        <button class="export-btn" onclick="exportData()" style="background: #7c3aed;">📥 Export Raw Data</button>
-                        <button class="export-btn" style="background: var(--danger);" onclick="clearData()">🗑️ Clear All Data</button>
-                    </div>
+        <div id="settings" class="view">
+            <div class="detail-view">
+                <h2>Settings</h2>
+                <div style="margin-bottom: 1rem;">
+                    <button class="export-btn" onclick="exportCompleteWeekData()">📊 Export Week Results (For Perplexity)</button>
+                    <button class="export-btn" onclick="exportData()" style="background: #7c3aed;">📥 Export Raw Data</button>
+                    <button class="export-btn" style="background: var(--danger);" onclick="clearData()">🗑️ Clear All Data</button>
+                </div>
                 <div style="background: var(--bg); padding: 1rem; border-radius: 0.5rem; font-size: 0.9rem; color: var(--text-light);">
                     <p><strong>Current Week:</strong> <span id="currentWeek">Week 1</span></p>
                     <p><strong>Days Completed:</strong> <span id="daysCompleted">0</span> / 5</p>
@@ -759,26 +760,90 @@
             });
         }
 
+        // SWIMMING GROUPING: Aggregate swimming exercise data
+        function getSwimmingGroupedData(day) {
+            const workout = workoutData[currentWeek][day];
+            const data = getDayData(day);
+            
+            // Find all swimming-related exercises
+            const swimmingExercises = ['Warm-up', 'Main Set', 'Cool-down'];
+            let totalSwimmingMeters = 0;
+            
+            if (data.exercises) {
+                workout.exercises.forEach((ex, idx) => {
+                    if (swimmingExercises.includes(ex.name)) {
+                        totalSwimmingMeters += (data.exercises[idx]?.repsCompleted || 0);
+                    }
+                });
+            }
+            
+            return totalSwimmingMeters;
+        }
+
+        // SWIMMING GROUPING: Filter exercises for display
+        function getDisplayExercises(day) {
+            const workout = workoutData[currentWeek][day];
+            
+            // Check if this day has swimming exercises
+            const hasSwimming = workout.exercises.some(ex => 
+                ['Warm-up', 'Main Set', 'Cool-down'].includes(ex.name)
+            );
+            
+            if (!hasSwimming) {
+                return workout.exercises.map((ex, idx) => ({ ...ex, originalIndex: idx }));
+            }
+            
+            // Group swimming exercises
+            const nonSwimmingExercises = [];
+            const swimmingExercises = [];
+            
+            workout.exercises.forEach((ex, idx) => {
+                if (['Warm-up', 'Main Set', 'Cool-down'].includes(ex.name)) {
+                    swimmingExercises.push({ ...ex, originalIndex: idx });
+                } else {
+                    nonSwimmingExercises.push({ ...ex, originalIndex: idx });
+                }
+            });
+            
+            // Return non-swimming exercises + combined swimming exercise
+            const displayExercises = [...nonSwimmingExercises];
+            if (swimmingExercises.length > 0) {
+                const totalReps = swimmingExercises[0]?.reps + swimmingExercises[1]?.reps + swimmingExercises[2]?.reps || '200m';
+                displayExercises.push({
+                    name: '🏊 Swimming (Total Distance)',
+                    sets: swimmingExercises.length,
+                    reps: totalReps,
+                    weight: '',
+                    video: 'https://youtu.be/7x0r9uT7K4c',
+                    isGrouped: true,
+                    originalIndices: swimmingExercises.map(e => e.originalIndex)
+                });
+            }
+            
+            return displayExercises;
+        }
+
         function showDayDetail(day) {
             const workout = workoutData[currentWeek][day];
             const data = getDayData(day);
+            const displayExercises = getDisplayExercises(day);
             const detailDiv = document.getElementById('dayDetail');
 
             let exerciseHtml = '';
-            workout.exercises.forEach((ex, idx) => {
-                const exData = data.exercises?.[idx] || {};
+            displayExercises.forEach((ex, displayIdx) => {
+                const exData = data.exercises?.[ex.originalIndex || displayIdx] || {};
                 exerciseHtml += `
                     <div class="exercise-item">
                         <h4>${ex.name}</h4>
                         <div class="exercise-details">
-                            <strong>Sets:</strong> ${ex.sets} | <strong>Reps:</strong> ${ex.reps} | <strong>Weight:</strong> ${ex.weight}
+                            <strong>Sets:</strong> ${ex.sets} | <strong>Reps/Distance:</strong> ${ex.reps} ${ex.weight ? `| <strong>Weight:</strong> ${ex.weight}` : ''}
                         </div>
                         ${ex.video ? `<div class="exercise-video"><a href="${ex.video}" target="_blank">📹 Watch Video</a></div>` : ''}
-                        <input type="number" class="reps-input" placeholder="Completed reps" value="${exData.repsCompleted || ''}" data-exercise="${idx}">
-                        <button class="timer-controls" onclick="startRest(${idx})" style="display: flex; gap: 0.5rem;">
+                        <input type="number" class="reps-input" placeholder="Completed reps" value="${exData.repsCompleted || ''}" data-exercise="${ex.originalIndex || displayIdx}" data-is-grouped="${ex.isGrouped ? 'true' : 'false'}">
+                        <button class="timer-controls" onclick="startRest(${ex.originalIndex || displayIdx})" style="display: flex; gap: 0.5rem;">
                             <button style="flex: 1;">⏱️ Rest Timer (30s)</button>
                         </button>
-                        <div id="timer-${idx}" class="timer-display" style="display: none;">00:30</div>
+                        <div id="timer-${ex.originalIndex || displayIdx}" class="timer-display" style="display: none;">00:30</div>
                     </div>
                 `;
             });
@@ -963,17 +1028,23 @@
         function renderProgressView() {
             const progressDiv = document.getElementById('progressContent');
             
-            // Get all unique exercises across all weeks and days
+            // Get all unique exercises across all weeks and days, EXCLUDING grouped swimming components
             const allExercises = new Set();
             Object.keys(workoutData).forEach(week => {
                 days.forEach(day => {
                     if (workoutData[week][day]?.exercises) {
                         workoutData[week][day].exercises.forEach(ex => {
-                            allExercises.add(ex.name);
+                            // Skip individual swimming components - they're combined
+                            if (!['Warm-up', 'Main Set', 'Cool-down'].includes(ex.name)) {
+                                allExercises.add(ex.name);
+                            }
                         });
                     }
                 });
             });
+            
+            // Add grouped Swimming option
+            allExercises.add('🏊 Swimming (Total Distance)');
 
             if (allExercises.size === 0) {
                 progressDiv.innerHTML = '<div class="no-data-message">No exercises found in workout data.</div>';
@@ -988,7 +1059,7 @@
             exerciseList.forEach(ex => {
                 const isActive = ex === selectedExercise ? 'active' : '';
                 filterHtml += `
-                    <button class="exercise-filter-btn ${isActive}" onclick="filterProgressExercise('${ex}')">
+                    <button class="exercise-filter-btn ${isActive}" onclick="filterProgressExercise('${ex.replace(/'/g, "\\'")}')">
                         ${ex}
                     </button>
                 `;
@@ -1014,7 +1085,7 @@
                             <div class="value">Week ${progressData.weeks[progressData.weeks.length - 1]}</div>
                         </div>
                         <div class="chart-stat-item">
-                            <div class="label">Latest Reps</div>
+                            <div class="label">Latest Total</div>
                             <div class="value">${progressData.reps[progressData.reps.length - 1]}</div>
                         </div>
                         <div class="chart-stat-item">
@@ -1057,12 +1128,22 @@
                     if (dayData) {
                         const parsedDay = JSON.parse(dayData);
                         
-                        // Find exercise index
-                        const exerciseIdx = workout.exercises.findIndex(ex => ex.name === exerciseName);
-                        
-                        if (exerciseIdx !== -1 && parsedDay.exercises?.[exerciseIdx]) {
-                            weekTotal += parsedDay.exercises[exerciseIdx].repsCompleted || 0;
-                            exerciseFound = true;
+                        if (exerciseName === '🏊 Swimming (Total Distance)') {
+                            // Sum all swimming exercise components
+                            workout.exercises.forEach((ex, idx) => {
+                                if (['Warm-up', 'Main Set', 'Cool-down'].includes(ex.name)) {
+                                    weekTotal += parsedDay.exercises?.[idx]?.repsCompleted || 0;
+                                    exerciseFound = true;
+                                }
+                            });
+                        } else {
+                            // Find regular exercise
+                            const exerciseIdx = workout.exercises.findIndex(ex => ex.name === exerciseName);
+                            
+                            if (exerciseIdx !== -1 && parsedDay.exercises?.[exerciseIdx]) {
+                                weekTotal += parsedDay.exercises[exerciseIdx].repsCompleted || 0;
+                                exerciseFound = true;
+                            }
                         }
                     }
                 });
